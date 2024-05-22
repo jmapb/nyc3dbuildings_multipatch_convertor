@@ -2,11 +2,13 @@ import json
 import geopandas as gpd
 from shapely.geometry import Polygon 
 
-def multipatch_convertor(geodataframe, z_unit_in='m', z_unit_out='m', relative_h=False, save=False, path='./', filename='output', out_format='geojson'):
+def multipatch_convertor(geodataframe, z_unit_in='m', relative_h=False, save=False, path='./', filename='output', out_format='geojson'):
     
     """Function converting ESRI Multipatch file into single polygons with 
-    assigned height attribute using GeoPandas. It allows conversion between 
-    meters ('m') and feets ('ft'), as well as assigining relative height.
+    assigned height attribute using GeoPandas. It supports input in either 
+    meters ('m') and feet ('ft'), as well as assigining relative height.
+    Output height values are always meters to comply with GeoJSON Format
+    RFC 7946.
     
     Dependencies:
         geopandas==0.3.0
@@ -18,8 +20,6 @@ def multipatch_convertor(geodataframe, z_unit_in='m', z_unit_out='m', relative_h
             GeoDataFrame to be converted;
     z_unit_in: str, {‘m’, ‘ft’}, default ‘m’
             height units of the input GeoDataFrame;
-    z_unit_out: str, {‘m’, ‘ft’}, default ‘m’
-            height units of the output GeoDataFrame;
     relative_h: bool, default False
             If the output GeoDataFrame should present relative height (Applies 
             when minimum height value is not equal to 0). All height values will 
@@ -86,13 +86,10 @@ def multipatch_convertor(geodataframe, z_unit_in='m', z_unit_out='m', relative_h
                 f['height']=f['height'] - min_h
              
         # Convert height units
-        if (z_unit_in == 'm') & (z_unit_out == 'ft'):
-            for f in splitted_feature_list:
-                f['height']=f['height'] * 3.28084
-        elif (z_unit_in == 'ft') & (z_unit_out == 'm'):
+        if z_unit_in == 'ft':
             for f in splitted_feature_list:
                 f['height']=f['height'] * 0.3048
-        elif z_unit_in == z_unit_out:
+        elif z_unit_in == 'm':
             pass
         else:
             raise NameError('wrongUnits')
