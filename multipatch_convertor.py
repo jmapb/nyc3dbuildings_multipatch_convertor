@@ -39,7 +39,7 @@ def multipatch_convertor(geodataframe, z_unit_in='m', z_unit_out='m', relative_h
     # Extract Coordinate Reference System (CRS) of the GeoDataFrame
     crs = geodataframe.crs
     
-    # Convert GeoDataFrame inot JSON structure
+    # Convert GeoDataFrame into JSON structure
     gdf_gj = json.loads(geodataframe.to_json())
     
     # Initiate list of features
@@ -96,7 +96,7 @@ def multipatch_convertor(geodataframe, z_unit_in='m', z_unit_out='m', relative_h
             pass
         else:
             raise NameError('wrongUnits')
-            print('Wrong height units given! Please, choose either ‘m’ for meters or ‘ft’ for feets')            
+            print('Wrong height units given! Please, choose either ‘m’ for meters or ‘ft’ for feet')            
                 
         # Add extracted new features to global feature list
         feature_list = feature_list + splitted_feature_list
