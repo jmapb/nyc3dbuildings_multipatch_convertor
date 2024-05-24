@@ -1,4 +1,4 @@
-# NYC 3D Building Multipatch Convertor
+# NYC 3D Buildings Multipatch Convertor
 ![conversion workflow](workflow.jpg)
 
 This project provides a **multipatch_convertor()** function designed to transform New York City's 3D building model files from [ESRI Multipatch](https://support.esri.com/en/white-paper/1483) format to GeoJSON using the [GeoPandas](http://geopandas.org/) library. The output will contain a seperate polygon for each building part of differing height, each tagged with a height value in meters.
