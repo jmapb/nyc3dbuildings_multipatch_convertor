@@ -87,21 +87,17 @@ def multipatch_convertor(geodataframe, z_unit_in='m', relative_h=False, save=Fal
             # Create new feature and assign properties to each Polygon
             new_feature = properties.copy()
             
-            # Extract new feature height
+            # Extract new feature height and adjust height if relative
             height = max(z_coords)
+            if relative_h:
+                height = height - min_h
             
-            # Assign new feature's height and vertices
-            new_feature['height'] = height
-            new_feature['geometry'] = Polygon(xy_coords)
-
-            # Populate polygon list
-            splitted_feature_list.append(new_feature)
-            
-        # Adjust height if relative
-        if relative_h:
-            for f in splitted_feature_list:
-                f['height']=f['height'] - min_h
-             
+            # If feature has non-zero height, assign properties and append to output
+            if height != 0:
+                new_feature['height'] = height
+                new_feature['geometry'] = Polygon(xy_coords)
+                splitted_feature_list.append(new_feature)
+                         
         # Convert height units
         if z_unit_in == 'ft':
             for f in splitted_feature_list:
